@@ -1,14 +1,15 @@
 package pt.isec.a21280317.tp_202223
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.widget.Button
-import android.widget.GridLayout
-import android.widget.GridView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.setMargins
 import pt.isec.a21280317.tp_202223.databinding.ActivityConfigSpgameBinding
 import kotlin.random.Random
 
@@ -23,28 +24,53 @@ class ConfigSPGameActivity : AppCompatActivity(){
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
+        val levelAct = 0
+        val levelNum = 0
         val gridLayout = GridLayout(this)
         gridLayout.columnCount = 5
         gridLayout.rowCount = 5
 
-        val params = GridLayout.LayoutParams()
-        params.width = GridLayout.LayoutParams.WRAP_CONTENT
-        params.height = GridLayout.LayoutParams.WRAP_CONTENT
-        params.setGravity(Gravity.CENTER)
-        gridLayout.layoutParams = params
+        val cellSize = 140
+        val cellMargin = 5
 
-//        gridLayout.setShowDividers(GridLayout.SHOW_DIVIDER_MIDDLE or GridLayout.SHOW_DIVIDER_BEGINNING or GridLayout.SHOW_DIVIDER_END)
-//        gridLayout.dividerPadding = 4
-//        gridLayout.dividerDrawable = ContextCompat.getDrawable(this, android.R.color.black)
-//        gridLayout.stretchMode = GridLayout.STRETCH_COLUMN_WIDTH
 
         for (i in 1..25){
-            val cell = TextView(this)
-            val value = Random.nextInt(1,10)
+            val cell =  TextView(this)
+            val value = Random.nextInt(1,10 + levelNum)
+            val actions = listOf("+","-","*","/")
+            val actionIndex = Random.nextInt(actions.size - levelAct)
+            val randAction = actions[actionIndex]
             cell.id = View.generateViewId()
-            cell.text = "$value"
+            if (i == 7 || i == 9 || i == 17 || i == 19) {
+                cell.text = ""
+            }
+            else if (i % 2 == 0) {
+                cell.text = randAction
+            }
+            else {
+                cell.text = "$value"
+            }
+            cell.setBackgroundColor(Color.LTGRAY)
+            cell.typeface = Typeface.DEFAULT_BOLD
+            cell.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+
+
+            val layoutParams = GridLayout.LayoutParams()
+            layoutParams.width = cellSize
+            layoutParams.height = cellSize
+            layoutParams.setMargins(cellMargin, cellMargin, cellMargin, cellMargin)
+            layoutParams.setMarginEnd(cellMargin)
+            layoutParams.setMarginStart(cellMargin)
+            layoutParams.topMargin = cellMargin
+            layoutParams.bottomMargin = cellMargin
+            cell.layoutParams = layoutParams
             gridLayout.addView(cell)
         }
+
+        val gridLayoutParams = FrameLayout.LayoutParams(5 * cellSize + 4 * cellSize, 5 * cellSize + 4 * cellSize)
+//        gridLayoutParams.gravity = Gravity.CENTER
+        gridLayout.layoutParams = gridLayoutParams
 
         binding.spgame.addView(gridLayout)
 
