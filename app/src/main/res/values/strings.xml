@@ -26,4 +26,8 @@
     <string name="msg_no_image">No image defined</string>
     <string name="msg_choose_history">Choose a Sketch:</string>
     <string name="msg_no_sketches">No sketches found</string>
+    <string name="grid_cell_size">50dp</string>
+    <string name="score">SCORE</string>
+    <string name="_0">0</string>
+    <integer name="grid_cell_size">50</integer>
 </resources>
