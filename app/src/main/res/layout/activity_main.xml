@@ -17,7 +17,7 @@
         android:text="@string/app_title"
         android:fontFamily="casual"
         android:textColor="@color/black"
-        android:textSize="32sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         android:textAlignment="center"/>
 
@@ -46,6 +46,15 @@
             android:fontFamily="casual"
             android:text="@string/msg_multi_player"/>
         <Button
+            android:id="@+id/btnHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:fontFamily="casual"
+            android:padding="16dp"
+            android:text="@string/msg_history"
+            android:textSize="24sp" />
+        <Button
             android:id="@+id/btnInfo"
             android:layout_margin="8dp"
             android:layout_width="match_parent"
@@ -54,14 +63,7 @@
             android:textSize="24sp"
             android:fontFamily="casual"
             android:text="@string/msg_info"/>
-        <Button
-            android:id="@+id/btnHistory"
-            android:layout_margin="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:textSize="24sp"
-            android:fontFamily="casual"
-            android:text="@string/msg_history"/>
+
+
     </LinearLayout>
 </FrameLayout>
