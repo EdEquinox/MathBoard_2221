@@ -1,94 +1,131 @@
 package pt.isec.a21280317.tp_202223
 
-import android.content.Intent
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.Gravity
+import android.os.CountDownTimer
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.*
-import android.widget.GridLayout.CENTER
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginTop
-import androidx.core.view.setMargins
+import androidx.constraintlayout.widget.ConstraintSet.Constraint
+import com.google.android.material.snackbar.Snackbar
 import pt.isec.a21280317.tp_202223.databinding.ActivityConfigSpgameBinding
-import java.util.*
 import kotlin.random.Random
 import kotlin.math.pow
 
 
 class ConfigSPGameActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityConfigSpgameBinding
+    private var levelAct = 1
+    private var levelNum = 1
+    private var score = 0
+    private lateinit var binding: ActivityConfigSpgameBinding
+    private var cellId: Int = 0
+    private lateinit var timer: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        var levelAct = 1
-        var levelNum = 1
-        var score = 0
 
         super.onCreate(savedInstanceState)
         binding = ActivityConfigSpgameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         generateGrid(levelAct, levelNum, score.toString())
 
-        val buttonNum = findViewById<Button>(R.id.btnNextLvlNum)
-        val buttonAct = findViewById<Button>(R.id.btnNextLvlAct)
-        val buttonLvl = findViewById<Button>(R.id.btnNextLvl2)
+        startTimer()
+        setOnClickListeners()
+    }
 
-        buttonNum.setOnClickListener{
-            if (levelNum<4){
-                levelNum += 1
-                generateGrid(levelAct, levelNum,score.toString())
-            }
-            else{
-                generateGrid(levelAct, levelNum,score.toString())
-            }
-            resultados()
-        }
+    override fun onStop() {
+        timer.cancel()
+        super.onStop()
+    }
 
-        buttonAct.setOnClickListener{
-            if (levelAct<4){
-                levelAct += 1
-                generateGrid(levelAct, levelNum,score.toString())
-            }
-            else{
-                generateGrid(levelAct, levelNum,score.toString())
-            }
-            resultados()
-        }
+    private fun startTimer() {
+        timer = createTimer()
+        timer.start()
+    }
 
-        buttonLvl.setOnClickListener {
-            score += 1
-            if (score%5==0){
-                val rand = Random.nextInt(0,1)
-                if (rand == 0){
-                    if (levelAct<4){
-                        levelAct += 1
-                        generateGrid(levelAct, levelNum,score.toString())
-                    }
-                }else{
-                    if (levelNum<4){
-                        levelNum += 1
-                        generateGrid(levelAct, levelNum,score.toString())
-                    }
+    private fun setOnClickListeners() {
+        cellId = results().key
+        println(cellId)
+        var clickedCell :Int
+        for (i in 0 until binding.gameGrid.childCount) {
+            val textView = binding.gameGrid.getChildAt(i) as TextView
+            textView.setOnClickListener {
+                clickedCell = i+1
+                println("Cell clicked: $clickedCell")
+                if (clickedCell == cellId){
+                    updateScore()
+                    val res = results()
+                    cellId = res.key
+                    println(res)
                 }
-            }else{
-                generateGrid(levelAct, levelNum,score.toString())
+                else{
+                    resetGame()
+                }
             }
-            resultados()
         }
+    }
+
+    private fun updateScore() {
+
+        score += 1
+        timer.cancel()
+        timer.start()
+        if (score % 5 == 0) {
+            Snackbar.make(binding.root, "Next Level!", Snackbar.LENGTH_LONG)
+                .setDuration(1000)
+                .show()
+            val rand = Random.nextInt(0, 2)
+            if (rand == 0) {
+                if (levelAct < 4) {
+                    levelAct += 1
+                    generateGrid(levelAct, levelNum, score.toString())
+                }
+            } else {
+                if (levelNum < 4) {
+                    levelNum += 1
+                    generateGrid(levelAct, levelNum, score.toString())
+                }
+            }
+        } else {
+            generateGrid(levelAct, levelNum, score.toString())
+        }
+    }
+
+    private fun resetGame() {
+        score = 0
+        timer.cancel()
+        timer.onFinish()
+        showLoseNotification()
+    }
 
 
-        resultados()
+    private fun createTimer() : CountDownTimer{
+        val timerView = binding.timer
 
+        val timer = object : CountDownTimer(16000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerView.text = (millisUntilFinished / 1000).toString()
+            }
+            override fun onFinish() {
+                timerView.text = "0"
+                showLoseNotification()
+            }
+        }
+        return timer
+    }
 
+    fun showLoseNotification() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("You lost the game")
+            .setPositiveButton("New Game", DialogInterface.OnClickListener { dialog, id ->
+                startActivity(intent)
+            })
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun generateGrid(levelAct: Int, levelNum: Int, score: String) {
@@ -109,27 +146,42 @@ class ConfigSPGameActivity : AppCompatActivity() {
                 textView.text = "$value"
             }
             textView.textSize = 20F - levelNum;
+            textView.setTextColor(Color.BLACK)
         }
         val textView = findViewById<TextView>(resources.getIdentifier("score", "id", packageName))
         textView.text = score
-    }
-
-    private fun resultados() {
-        val gridLayout = findViewById<GridLayout>(R.id.gameGrid)
-
-        val colTexts = getColumnExp(gridLayout)
-        println(colTexts)
-
-        val rowTexts = getRowExp(gridLayout)
-        println(rowTexts)
-
-        val resRows = mutableListOf<Double>()
-        val resCols = mutableListOf<Double>()
-
 
     }
 
-    fun getColumnExp(gridLayout: GridLayout): List<String> {
+    private fun eval(expression: String): Double {
+        return expression.split("+", "-", "*", "/")
+            .map { it.trim() }
+            .map { it.toDouble() }
+            .reduce { acc, element ->
+                when {
+                    expression.contains("+") -> acc + element
+                    expression.contains("-") -> acc - element
+                    expression.contains("*") -> acc * element
+                    expression.contains("/") -> acc / element
+                    else -> acc
+                }
+            }
+    }
+
+    private fun results() :  Map.Entry<Int, Double> {
+        val gridLayout = binding.gameGrid
+
+        val colRes = getColumnRes(gridLayout)
+        val rowRes = getRowRes(gridLayout)
+
+        return if (rowRes.value > colRes.value){
+            rowRes
+        } else{
+            colRes
+        }
+    }
+
+    private fun getColumnRes(gridLayout: GridLayout): Map.Entry<Int,Double> {
 
         val expression = mutableListOf<String>()
         for (column in 0 until  gridLayout.columnCount) {
@@ -142,25 +194,17 @@ class ConfigSPGameActivity : AppCompatActivity() {
             }
             expression.add(columnRes.toString())
         }
-
-        println(expression)
-
         expression.removeAt(1)
         expression.removeAt(2)
 
-//        val result = evaluate("1+2*3")
-//        println( result)
+        val mapResult = mapOf(1 to eval(expression[0]) , 3 to eval(expression[1]), 5 to eval(expression[2]) )
 
-        //expression.add(evaluate(expression[0]).toString())
-//        expression.add(evaluate(expression[1]).toString())
-//        expression.add(evaluate(expression[2]).toString())
+        val maior = mapResult.maxBy { it.value }
 
-        println(expression)
-
-        return expression
+        return maior
     }
 
-    fun getRowExp(gridLayout: GridLayout): List<String> {
+    private fun getRowRes(gridLayout: GridLayout): Map.Entry<Int, Double> {
         val expression = mutableListOf<String>()
         for (row in 0 until gridLayout.rowCount) {
             val rowRes = StringBuilder()
@@ -175,55 +219,11 @@ class ConfigSPGameActivity : AppCompatActivity() {
         expression.removeAt(1)
         expression.removeAt(2)
 
-        return expression
+        val mapResult =
+            mapOf(1 to eval(expression[0]), 11 to eval(expression[1]), 21 to eval(expression[2]))
+
+        return mapResult.maxBy { it.value }
+
     }
-
-
-//    fun evaluate(expression: String): Double {
-//        val tokens = mutableListOf<String>()
-//        var token = ""
-//        for (ch in expression) {
-//            if (ch.isDigit() || ch == '.') {
-//                // add the digit or decimal point to the current token
-//                token += ch
-//            } else {
-//                // add the current token to the list of tokens
-//                tokens.add(token)
-//                token = ""
-//
-//                // add the operation to the list of tokens
-//                tokens.add(ch.toString())
-//            }
-//        }
-//        // add the last token to the list of tokens
-//        tokens.add(token)
-//
-//        // evaluate the expression using a stack
-//        val stack = mutableListOf<Double>()
-//        for (t in tokens) {
-//            if (t.isEmpty()) {
-//                continue
-//            }
-//            when {
-//                t[0].isDigit() -> stack.add(t.toDouble())
-//                else -> {
-//                    // perform the operation
-//                    val right = stack.removeAt(stack.size - 1)
-//                    val left = stack.removeAt(stack.size - 1)
-//                    when (t[0]) {
-//                        '+' -> stack.add(left + right)
-//                        '-' -> stack.add(left - right)
-//                        '*' -> stack.add(left * right)
-//                        '/' -> stack.add(left / right)
-//                    }
-//                }
-//            }
-//        }
-//
-//        return stack.first()
-//    }
-
-//    val spacedExpression = rowString.replace(Regex("(?<=[\\d])"), " ").replace(Regex("(?=[\\d])"), " ")
-//    val result = evaluate(spacedExpression)
 
 }

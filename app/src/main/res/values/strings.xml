@@ -2,8 +2,8 @@
     <string name="app_name">Math Board</string>
     <string name="msg_single_player">Single-player</string>
     <string name="msg_multi_player">Multi-player</string>
-    <string name="msg_info">Info</string>
-    <string name="msg_history">History</string>
+    <string name="msg_user">User</string>
+    <string name="msg_history">Top 5</string>
     <string name="app_title">Math Board</string>
     <string name="msg_soon">Available soon</string>
     <string name="ask_title">Title:</string>
@@ -26,8 +26,28 @@
     <string name="msg_no_image">No image defined</string>
     <string name="msg_choose_history">Choose a Sketch:</string>
     <string name="msg_no_sketches">No sketches found</string>
-    <string name="grid_cell_size">50dp</string>
+    <string name="grid_cell_size" translatable="false">50dp</string>
     <string name="score">SCORE</string>
-    <string name="_0">0</string>
+    <string name="_0" translatable="false">0</string>
+    <string name="numbtn" translatable="false">Num</string>
+    <string name="actbtn" translatable="false">act</string>
+    <string name="vicbtn" translatable="false">vic</string>
+    <string name="choose_image">Choose image</string>
+    <string name="name">NAME</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="age">Age:</string>
+    <string name="avatar">AVATAR</string>
+    <string name="enter_your_age">Enter your age</string>
+    <string name="save_user">Save User</string>
+    <string name="mn_Credits">Credits</string>
+    <string name="credits_title">CREDITS</string>
+    <string name="year">2022/2023</string>
+    <string name="amov">Arquitecturas Móveis</string>
+    <string name="aluno1">José Marques</string>
+    <string name="aluno2">Francisca Duarte</string>
+    <string name="num1">2018019295</string>
+    <string name="num2">2019126141</string>
+    <string name="logo">logo</string>
     <integer name="grid_cell_size">50</integer>
 </resources>
