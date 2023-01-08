@@ -1,18 +1,15 @@
 package pt.isec.a21280317.tp_202223
 
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import com.google.android.material.snackbar.Snackbar
 import pt.isec.a21280317.tp_202223.databinding.ActivityConfigSpgameBinding
-import pt.isec.a21280317.tp_202223.databinding.ActivityConfigUserBinding
 import pt.isec.a21280317.tp_202223.databinding.ActivityConfigUserLandscapeBinding
 import kotlin.random.Random
 import kotlin.math.pow
@@ -79,6 +76,7 @@ class ConfigSPGameActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     private fun updateScore() {
@@ -133,9 +131,13 @@ class ConfigSPGameActivity : AppCompatActivity() {
     fun showLoseNotification() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage("You lost the game")
-            .setPositiveButton("New Game", DialogInterface.OnClickListener { dialog, id ->
+            .setPositiveButton("New Game") { dialog, id ->
                 startActivity(intent)
-            })
+            }
+            .setNegativeButton("Main Menu") { dialog, id ->
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
         val dialog = builder.create()
         dialog.show()
     }
