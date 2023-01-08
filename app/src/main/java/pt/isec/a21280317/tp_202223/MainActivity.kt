@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import pt.isec.a21280317.tp_202223.databinding.ActivityMainBinding
 import pt.isec.a21280317.tp_202223.databinding.ActivityMainLandscapeBinding
 
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity(){
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             bindingLandscapeBinding = ActivityMainLandscapeBinding.inflate(layoutInflater)
-            setContentView(bindingLandscapeBinding.root)
+            setContentView(R.layout.activity_main_landscape)
 
             bindingLandscapeBinding.btnSP.setOnClickListener {
                 val intent = Intent(this, ConfigSPGameActivity::class.java)

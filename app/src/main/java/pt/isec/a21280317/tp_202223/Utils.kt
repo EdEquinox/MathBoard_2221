@@ -18,7 +18,7 @@ fun setPic(view: View, path: String) {
     getPic(view,path)?.also {
         when {
             // No caso seguinte notar que o "as ImageView" é desnecessário
-            view is ImageView -> (view as ImageView).setImageBitmap(it)
+            view is ImageView -> (view).setImageBitmap(it)
             //else -> view.background = bitmap.toDrawable(view.resources)
             else -> view.background = BitmapDrawable(view.resources, it)
         }

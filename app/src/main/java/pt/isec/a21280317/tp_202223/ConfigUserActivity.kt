@@ -1,13 +1,12 @@
 package pt.isec.a21280317.tp_202223
 
-import android.content.Context
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -15,9 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import pt.isec.a21280317.tp_202223.databinding.ActivityConfigUserBinding
-import pt.isec.a21280317.tp_202223.databinding.ActivityConfigUserLandscapeBinding
-import pt.isec.a21280317.tp_202223.databinding.ActivityMainBinding
-import pt.isec.a21280317.tp_202223.databinding.ActivityMainLandscapeBinding
 import java.io.File
 
 class ConfigUserActivity : AppCompatActivity(){
@@ -38,22 +34,14 @@ class ConfigUserActivity : AppCompatActivity(){
     private var permissionsGranted = false
 
     private lateinit var binding: ActivityConfigUserBinding
-    private lateinit var bindingLandscapeBinding: ActivityConfigUserLandscapeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            bindingLandscapeBinding = ActivityConfigUserLandscapeBinding.inflate(layoutInflater)
-            setContentView(bindingLandscapeBinding.root)
+            binding = ActivityConfigUserBinding.inflate(layoutInflater)
+            setContentView(R.layout.activity_config_user_landscape)
 
-            bindingLandscapeBinding.chooseImageButton.setOnClickListener{
-                chooseImage()
-            }
-
-            bindingLandscapeBinding.takePicButton.setOnClickListener{
-                takePhoto()
-            }
 
         } else if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             binding = ActivityConfigUserBinding.inflate(layoutInflater)
@@ -66,6 +54,11 @@ class ConfigUserActivity : AppCompatActivity(){
             binding.takePicButton.setOnClickListener{
                 takePhoto()
             }
+
+            binding.saveUser.setOnClickListener {
+                showSaveNotification()
+            }
+
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -74,7 +67,7 @@ class ConfigUserActivity : AppCompatActivity(){
         updatePreview()
     }
 
-    fun updatePreview() {
+    private fun updatePreview() {
         if (imagePath != null){
             setPic(binding.avaPreview, imagePath!!)
             binding.avaPreview.setBackgroundColor(Color.rgb(142,175,157))
@@ -92,7 +85,7 @@ class ConfigUserActivity : AppCompatActivity(){
         imagePath = uri?.let { createFileFromUri(this, it) }
         updatePreview()
     }
-    fun chooseImage() {
+    private fun chooseImage() {
         Log.i(TAG, "chooseImage_v3: ")
         startActivityForContentResult.launch("image/*")
         updatePreview()
@@ -107,7 +100,7 @@ class ConfigUserActivity : AppCompatActivity(){
         updatePreview()
     }
 
-    fun takePhoto() {
+    private fun takePhoto() {
         imagePath = getTempFilename(this)
         Log.i(TAG, "takePhoto: $imagePath")
         startActivityForTakePhotoResult.launch(
@@ -128,19 +121,19 @@ class ConfigUserActivity : AppCompatActivity(){
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    val requestPermissionsLauncher = registerForActivityResult(
+    private val requestPermissionsLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()) { grantResults ->
         permissionsGranted = grantResults.values.any { it }
     }
 
-    val requestPermissionLauncher = registerForActivityResult(
+    private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         permissionsGranted = isGranted
     }
 
-    fun verifyPermissions() {
-        Log.i(TAG, "verifyPermissions_v3: ")
+    private fun verifyPermissions() {
+        Log.i(TAG, "verifyPermissions: ")
         if (mode == CAMERA) {
             permissionsGranted = ContextCompat.checkSelfPermission(
                 this,
@@ -150,7 +143,6 @@ class ConfigUserActivity : AppCompatActivity(){
                 requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
             return
         }
-        //mode == GALLERY
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissionsGranted = ContextCompat.checkSelfPermission(
                 this,
@@ -175,4 +167,21 @@ class ConfigUserActivity : AppCompatActivity(){
         } else
             permissionsGranted = true
     }
+
+    private fun showSaveNotification() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("User successfully saved!")
+            .setPositiveButton("OK") { _, _ ->
+                startActivity(intent)
+            }
+            .setNegativeButton("Main Menu") { _, _ ->
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
 }
+
+

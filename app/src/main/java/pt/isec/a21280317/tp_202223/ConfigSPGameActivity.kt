@@ -10,7 +10,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import pt.isec.a21280317.tp_202223.databinding.ActivityConfigSpgameBinding
-import pt.isec.a21280317.tp_202223.databinding.ActivityConfigUserLandscapeBinding
 import kotlin.random.Random
 import kotlin.math.pow
 
@@ -21,7 +20,6 @@ class ConfigSPGameActivity : AppCompatActivity() {
     private var levelNum = 1
     private var score = 0
     private lateinit var binding: ActivityConfigSpgameBinding
-    private lateinit var bindingLandscapeBinding : ActivityConfigUserLandscapeBinding
     private var cellId: Int = 0
     private lateinit var timer: CountDownTimer
 
@@ -30,20 +28,28 @@ class ConfigSPGameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            bindingLandscapeBinding = ActivityConfigUserLandscapeBinding.inflate(layoutInflater)
-            setContentView(bindingLandscapeBinding.root)
+            binding = ActivityConfigSpgameBinding.inflate(layoutInflater)
+            setContentView(R.layout.activity_config_spgame_landscape)
+
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            generateGrid(levelAct, levelNum, score.toString())
+
+            startTimer()
+            setOnClickListeners()
 
         } else if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             binding = ActivityConfigSpgameBinding.inflate(layoutInflater)
             setContentView(binding.root)
 
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            generateGrid(levelAct, levelNum, score.toString())
+
+            startTimer()
+            setOnClickListeners()
+
         }
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        generateGrid(levelAct, levelNum, score.toString())
 
-        startTimer()
-        setOnClickListeners()
     }
 
     override fun onStop() {
@@ -128,13 +134,13 @@ class ConfigSPGameActivity : AppCompatActivity() {
         return timer
     }
 
-    fun showLoseNotification() {
+    private fun showLoseNotification() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage("You lost the game")
-            .setPositiveButton("New Game") { dialog, id ->
+            .setPositiveButton("New Game") { _, _ ->
                 startActivity(intent)
             }
-            .setNegativeButton("Main Menu") { dialog, id ->
+            .setNegativeButton("Main Menu") { _, _ ->
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
@@ -159,7 +165,7 @@ class ConfigSPGameActivity : AppCompatActivity() {
             } else {
                 textView.text = "$value"
             }
-            textView.textSize = 20F - levelNum;
+            textView.textSize = 20F - levelNum
             textView.setTextColor(Color.BLACK)
         }
         val textView = findViewById<TextView>(resources.getIdentifier("score", "id", packageName))
@@ -195,10 +201,10 @@ class ConfigSPGameActivity : AppCompatActivity() {
         }
     }
 
-    private fun getColumnRes(gridLayout: GridLayout): Map.Entry<Int,Double> {
+    private fun getColumnRes(gridLayout: GridLayout): Map.Entry<Int, Double> {
 
         val expression = mutableListOf<String>()
-        for (column in 0 until  gridLayout.columnCount) {
+        for (column in 0 until gridLayout.columnCount) {
             val columnRes = StringBuilder()
             for (row in 0 until gridLayout.rowCount) {
                 val view = gridLayout.getChildAt((row * gridLayout.columnCount + column))
@@ -211,11 +217,10 @@ class ConfigSPGameActivity : AppCompatActivity() {
         expression.removeAt(1)
         expression.removeAt(2)
 
-        val mapResult = mapOf(1 to eval(expression[0]) , 3 to eval(expression[1]), 5 to eval(expression[2]) )
+        val mapResult =
+            mapOf(1 to eval(expression[0]), 3 to eval(expression[1]), 5 to eval(expression[2]))
 
-        val maior = mapResult.maxBy { it.value }
-
-        return maior
+        return mapResult.maxBy { it.value }
     }
 
     private fun getRowRes(gridLayout: GridLayout): Map.Entry<Int, Double> {

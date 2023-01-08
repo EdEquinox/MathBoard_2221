@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "823796305026",
+    "firebase_url": "https://mathboard-6f88d-default-rtdb.firebaseio.com",
+    "project_id": "mathboard-6f88d",
+    "storage_bucket": "mathboard-6f88d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823796305026:android:f2045268536e3811d7789b",
+        "android_client_info": {
+          "package_name": "pt.isec.a21280317.tp_202223"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823796305026-0ggedslm308b5tksusaafbbp8h65i4qh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0pYqxwUjFBiAgiTR75dkmMHdk7t2G0I0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823796305026-0ggedslm308b5tksusaafbbp8h65i4qh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
