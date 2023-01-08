@@ -1,5 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/userPage"
@@ -15,45 +14,50 @@
         android:contentDescription="@string/avatar"
         app:layout_constraintBottom_toTopOf="@+id/nameLabel"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.52" />
+        app:layout_constraintVertical_bias="0.649"
+        android:orientation="horizontal"/>
 
     <EditText
         android:id="@+id/nameField"
         android:layout_width="342dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="268dp"
+        android:layout_height="48dp"
         android:autofillHints="name"
         android:hint="@string/enter_your_name"
         android:inputType="text"
         android:textAlignment="center"
+        android:textColorHint="#263238"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/imageLabel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.472" />
+        app:layout_constraintVertical_bias="0.925" />
 
     <TextView
         android:id="@+id/nameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
         android:text="@string/name"
+        android:textColor="#263238"
         app:layout_constraintBottom_toTopOf="@+id/nameField"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.762" />
+        app:layout_constraintVertical_bias="0.877" />
 
     <Button
         android:id="@+id/chooseImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="180dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginBottom="80dp"
         android:text="@string/choose_image"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -61,11 +65,11 @@
         android:id="@+id/takePicButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="180dp"
+        android:layout_marginBottom="80dp"
         android:text="@string/take_picture"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.617"
         app:layout_constraintStart_toEndOf="@+id/chooseImageButton" />
 
     <TextView
@@ -74,26 +78,25 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/avatar"
+        android:textColor="#263238"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.592" />
+        app:layout_constraintVertical_bias="0.653" />
 
     <Button
         android:id="@+id/saveUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="68dp"
         android:gravity="center"
         android:text="@string/save_user"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageLabel"
-        app:layout_constraintVertical_bias="0.946" />
+        app:layout_constraintVertical_bias="0.714" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

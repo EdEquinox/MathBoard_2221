@@ -2,6 +2,7 @@ package pt.isec.a21280317.tp_202223
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import com.google.android.material.snackbar.Snackbar
 import pt.isec.a21280317.tp_202223.databinding.ActivityConfigSpgameBinding
+import pt.isec.a21280317.tp_202223.databinding.ActivityConfigUserBinding
+import pt.isec.a21280317.tp_202223.databinding.ActivityConfigUserLandscapeBinding
 import kotlin.random.Random
 import kotlin.math.pow
 
@@ -21,14 +24,23 @@ class ConfigSPGameActivity : AppCompatActivity() {
     private var levelNum = 1
     private var score = 0
     private lateinit var binding: ActivityConfigSpgameBinding
+    private lateinit var bindingLandscapeBinding : ActivityConfigUserLandscapeBinding
     private var cellId: Int = 0
     private lateinit var timer: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        binding = ActivityConfigSpgameBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            bindingLandscapeBinding = ActivityConfigUserLandscapeBinding.inflate(layoutInflater)
+            setContentView(bindingLandscapeBinding.root)
+
+        } else if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            binding = ActivityConfigSpgameBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+
+        }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         generateGrid(levelAct, levelNum, score.toString())
